@@ -41,9 +41,11 @@ function post_stats_home_page(){
     $result .= '    <table class="widefat fixed" cellspacing="0">';
     $result .= '        <thead>';
     $result .= '            <tr>';
-    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 10%;">ID</th>';
-    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 70%;">Title</th>';
-    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 20%;">Date</th>';
+    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 5%;">ID</th>';
+    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 65%;">Title</th>';
+    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 5%;">Views</th>';
+    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 10%;">Author</th>';
+    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 15%;">Date</th>';
     $result .= '            </tr>';
     $result .= '        </thead>';
     $result .= '        <tbody>';
@@ -51,6 +53,8 @@ function post_stats_home_page(){
         $result .= '        <tr class="alternate">';
         $result .= '            <td class="column-columnname" scope="row">' . $post->ID . '</td>';
         $result .= '            <td class="column-columnname"><a href="' . $post->guid . '" target="_blank">' . $post->post_title . '</a></td>';
+        $result .= '            <td class="column-columnname">' . '0'. '</td>';
+        $result .= '            <td class="column-columnname">' . get_the_author_meta( 'first_name', $post->post_author ) . ' ' . get_the_author_meta( 'last_name', $post->post_author ) . '</td>';
         $result .= '            <td class="column-columnname">' . $post->post_date . '</td>';
         $result .= '        </tr>';
     }
