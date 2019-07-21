@@ -14,7 +14,7 @@ function wpdocs_register_my_custom_menu_page() {
         __( 'Post Stats', 'textdomain' ),
         'Post Stats',
         'manage_options',
-        'myplugin/myplugin-admin.php',
+        'post-stats/post-stats-admin.php',
         'post_stats_home_page',
         'dashicons-analytics',
         3
@@ -24,28 +24,41 @@ add_action( 'admin_menu', 'wpdocs_register_my_custom_menu_page' );
 
 
 function post_stats_home_page(){
-    $today = getdate();
+    $search_by_date = getdate();
+
+    if ( isset( $_GET['search_by_date'] ) ) {
+        $date_in_string = $_GET['search_by_date'];
+        $formatted_date = explode( '-', $date_in_string );
+        $raw_date_format = strtotime( $formatted_date[1] . '/' . $formatted_date[2] . '/' . $formatted_date[0] );
+        $search_by_date = getdate( $raw_date_format );
+    }
+
     $args = array(
         'posts_per_page'  => -1,
         'post_type'       => 'post',
         'post_status'     => 'publish',
-        'year'            => $today['year'],
-        'monthnum'        => $today['mon'],
-        'day'             => $today['mday']
+        'year'            => $search_by_date['year'],
+        'monthnum'        => $search_by_date['mon'],
+        'day'             => $search_by_date['mday']
     );
     $posts = get_posts($args);
 
     $result =  '<div class="wrap">';
     $result .= '    <h2>Post Stats</h2>';
     $result .= '    <p>Posts created by today (' . date('Y-m-d') . ')</p>';
-    $result .= '    <table class="widefat fixed" cellspacing="0">';
+    $result .= '    <form action="" method="GET">';
+    $result .= '        <input type="hidden" name="page" value="post-stats/post-stats-admin.php"></input>';
+    $result .= '        Date: <input type="date" name="search_by_date" data-date="" data-date-format="DD MM YYYY" required></input>';
+    $result .= '        <input type="submit" value="Search" class="button"></input>';
+    $result .= '    </form>';
+    $result .= '    <table class="widefat fixed" cellspacing="0" style="margin-top: 15px;">';
     $result .= '        <thead>';
     $result .= '            <tr>';
-    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 5%;">ID</th>';
-    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 65%;">Title</th>';
-    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 5%;">Views</th>';
-    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 10%;">Author</th>';
-    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 15%;">Date</th>';
+    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 10%;"><strong>ID</strong></th>';
+    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 55%;"><strong>Title</strong></th>';
+    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 5%;"><strong>Views</strong></th>';
+    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 15%;"><strong>Author</strong></th>';
+    $result .= '                <th id="columnname" class="manage-column column-columnname" scope="col" style="width: 15%;"><strong>Date</strong></th>';
     $result .= '            </tr>';
     $result .= '        </thead>';
     $result .= '        <tbody>';
