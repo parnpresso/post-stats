@@ -63,10 +63,12 @@ function post_stats_home_page(){
     $result .= '        </thead>';
     $result .= '        <tbody>';
     foreach ( $posts as $post ) {
+        $post_view_count = get_post_meta( $post->ID, 'post_views_count', true );
+
         $result .= '        <tr class="alternate">';
         $result .= '            <td class="column-columnname" scope="row">' . $post->ID . '</td>';
         $result .= '            <td class="column-columnname"><a href="' . $post->guid . '" target="_blank">' . $post->post_title . '</a></td>';
-        $result .= '            <td class="column-columnname">' . '0'. '</td>';
+        $result .= '            <td class="column-columnname">' . $post_view_count . '</td>';
         $result .= '            <td class="column-columnname">' . get_the_author_meta( 'first_name', $post->post_author ) . ' ' . get_the_author_meta( 'last_name', $post->post_author ) . '</td>';
         $result .= '            <td class="column-columnname">' . $post->post_date . '</td>';
         $result .= '        </tr>';
